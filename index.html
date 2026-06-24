@@ -2128,13 +2128,15 @@ function loadDragonImage(d, imgEl, loadingEl){
   loadingEl.innerHTML = '<span style="font-size:80px;filter:drop-shadow(0 0 20px rgba(212,168,67,0.5))">' + d.emoji + '</span>';
 
   const override = (typeof d === 'object' && d && d.imageFileName) ? String(d.imageFileName).trim() : '';
-  const rawName = override || (d.name || '').trim();
-  const safeName = rawName
-    .replace(/[^a-zA-Z0-9\-_ ]+/g, '')
-    .trim()
-    .replace(/ +/g, '-');
-  const ext = safeName.toLowerCase().endsWith('.png') ? '' : '.png';
-  const fileName = safeName + ext;
+  const fileName = override || (function(){
+    const rawName = (d.name || '').trim();
+    const safeName = rawName
+      .replace(/[^a-zA-Z0-9\-_ ]+/g, '')
+      .trim()
+      .replace(/ +/g, '-');
+    const ext = safeName.toLowerCase().endsWith('.png') ? '' : '.png';
+    return safeName + ext;
+  })();
 
   const cldUrl = 'https://res.cloudinary.com/dhc14b9ex/image/upload/dragons/' + encodeURIComponent(fileName);
 
